@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { FileDropzone } from '@/components/FileDropzone';
@@ -39,6 +38,34 @@ const Index = () => {
     setImages(prev => [...prev, ...newImages]);
   }, []);
 
+  const getActiveApiKeyForModel = (model: string) => {
+    const stored = localStorage.getItem('prostoxai_api_keys_v2');
+    if (!stored) return null;
+    
+    const apiKeys = JSON.parse(stored);
+    const activeKey = apiKeys.find((key: any) => key.model === model && key.isActive);
+    return activeKey?.key || null;
+  };
+
+  const updateApiKeyUsage = (model: string) => {
+    const stored = localStorage.getItem('prostoxai_api_keys_v2');
+    if (!stored) return;
+    
+    const apiKeys = JSON.parse(stored);
+    const updatedKeys = apiKeys.map((key: any) => {
+      if (key.model === model && key.isActive) {
+        return {
+          ...key,
+          lastUsed: new Date().toISOString(),
+          requestsMade: key.requestsMade + 1
+        };
+      }
+      return key;
+    });
+    
+    localStorage.setItem('prostoxai_api_keys_v2', JSON.stringify(updatedKeys));
+  };
+
   const processAllImages = async () => {
     if (images.length === 0) {
       toast({
@@ -49,13 +76,12 @@ const Index = () => {
       return;
     }
 
-    const apiKeys = JSON.parse(localStorage.getItem('prostoxai_api_keys') || '{}');
-    const currentKey = apiKeys[selectedModel];
+    const currentKey = getActiveApiKeyForModel(selectedModel);
 
     if (!currentKey) {
       toast({
         title: "API Key Required",
-        description: `Please add an API key for ${selectedModel} in settings.`,
+        description: `Please add an active API key for ${selectedModel} in settings.`,
         variant: "destructive",
       });
       return;
@@ -76,6 +102,7 @@ const Index = () => {
 
         try {
           const metadata = await processImageWithAI(image.file, selectedModel, currentKey);
+          updateApiKeyUsage(selectedModel);
           setImages(prev => prev.map(img => 
             img.id === image.id 
               ? { ...img, status: 'done', metadata } 
@@ -149,13 +176,12 @@ const Index = () => {
     const image = images.find(img => img.id === imageId);
     if (!image) return;
 
-    const apiKeys = JSON.parse(localStorage.getItem('prostoxai_api_keys') || '{}');
-    const currentKey = apiKeys[selectedModel];
+    const currentKey = getActiveApiKeyForModel(selectedModel);
 
     if (!currentKey) {
       toast({
         title: "API Key Required",
-        description: `Please add an API key for ${selectedModel} in settings.`,
+        description: `Please add an active API key for ${selectedModel} in settings.`,
         variant: "destructive",
       });
       return;
@@ -167,6 +193,7 @@ const Index = () => {
 
     try {
       const metadata = await processImageWithAI(image.file, selectedModel, currentKey);
+      updateApiKeyUsage(selectedModel);
       setImages(prev => prev.map(img => 
         img.id === imageId 
           ? { ...img, status: 'done', metadata } 
