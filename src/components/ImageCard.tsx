@@ -38,32 +38,32 @@ export const ImageCard = ({ image, onRetry }: ImageCardProps) => {
   const getStatusIcon = () => {
     switch (image.status) {
       case 'pending':
-        return <Clock className="w-4 h-4 text-gray-500" />;
+        return <Clock className="w-4 h-4 text-gray-600 dark:text-gray-400" />;
       case 'processing':
-        return <RefreshCw className="w-4 h-4 text-blue-500 animate-spin" />;
+        return <RefreshCw className="w-4 h-4 text-blue-600 animate-spin" />;
       case 'done':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
+        return <CheckCircle className="w-4 h-4 text-green-600" />;
       case 'error':
-        return <XCircle className="w-4 h-4 text-red-500" />;
+        return <XCircle className="w-4 h-4 text-red-600" />;
     }
   };
 
   const getStatusBadge = () => {
-    const baseClasses = "text-xs font-medium";
+    const baseClasses = "text-xs font-semibold";
     switch (image.status) {
       case 'pending':
-        return <Badge variant="secondary" className={baseClasses}>Pending</Badge>;
+        return <Badge variant="secondary" className={`${baseClasses} bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200`}>Pending</Badge>;
       case 'processing':
-        return <Badge className={`${baseClasses} bg-blue-500`}>Processing</Badge>;
+        return <Badge className={`${baseClasses} bg-blue-600 text-white`}>Processing</Badge>;
       case 'done':
-        return <Badge className={`${baseClasses} bg-green-500`}>Done</Badge>;
+        return <Badge className={`${baseClasses} bg-green-600 text-white`}>Done</Badge>;
       case 'error':
-        return <Badge variant="destructive" className={baseClasses}>Error</Badge>;
+        return <Badge className={`${baseClasses} bg-red-600 text-white`}>Error</Badge>;
     }
   };
 
   return (
-    <Card className="glass overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+    <Card className="liquid-glass overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
       <div className="aspect-video relative bg-gray-100 dark:bg-gray-800">
         {!imageError ? (
           <img
@@ -86,21 +86,21 @@ export const ImageCard = ({ image, onRetry }: ImageCardProps) => {
 
       <CardContent className="p-4 space-y-4">
         <div>
-          <p className="font-medium text-sm truncate" title={image.file.name}>
+          <p className="font-semibold text-sm truncate text-gray-900 dark:text-gray-100" title={image.file.name}>
             {image.file.name}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-gray-600 dark:text-gray-400">
             {(image.file.size / 1024 / 1024).toFixed(2)} MB
           </p>
         </div>
 
         {image.status === 'error' && image.error && (
           <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
-            <p className="text-sm text-red-700 dark:text-red-300">{image.error}</p>
+            <p className="text-sm text-red-800 dark:text-red-200">{image.error}</p>
             <Button
               size="sm"
               variant="outline"
-              className="mt-2 text-red-700 border-red-300 hover:bg-red-50"
+              className="mt-2 text-red-800 border-red-300 hover:bg-red-50 dark:text-red-200 dark:border-red-700"
               onClick={onRetry}
             >
               <RefreshCw className="w-3 h-3 mr-1" />
@@ -112,7 +112,7 @@ export const ImageCard = ({ image, onRetry }: ImageCardProps) => {
         {image.metadata && (
           <div className="space-y-3">
             <div>
-              <Label htmlFor={`title-${image.id}`} className="text-xs">
+              <Label htmlFor={`title-${image.id}`} className="text-xs font-medium text-gray-800 dark:text-gray-200">
                 SEO Title ({image.metadata.title.length}/70)
               </Label>
               <div className="flex items-center space-x-2 mt-1">
@@ -120,7 +120,7 @@ export const ImageCard = ({ image, onRetry }: ImageCardProps) => {
                   id={`title-${image.id}`}
                   value={image.metadata.title}
                   readOnly
-                  className="text-sm"
+                  className="text-sm text-gray-900 dark:text-gray-100"
                 />
                 <Button
                   size="icon"
@@ -134,7 +134,7 @@ export const ImageCard = ({ image, onRetry }: ImageCardProps) => {
             </div>
 
             <div>
-              <Label htmlFor={`keywords-${image.id}`} className="text-xs">
+              <Label htmlFor={`keywords-${image.id}`} className="text-xs font-medium text-gray-800 dark:text-gray-200">
                 Keywords ({image.metadata.keywords.length} items)
               </Label>
               <div className="flex items-start space-x-2 mt-1">
@@ -143,7 +143,7 @@ export const ImageCard = ({ image, onRetry }: ImageCardProps) => {
                   value={image.metadata.keywords.join(', ')}
                   readOnly
                   rows={3}
-                  className="text-sm resize-none"
+                  className="text-sm resize-none text-gray-900 dark:text-gray-100"
                 />
                 <Button
                   size="icon"
@@ -157,7 +157,7 @@ export const ImageCard = ({ image, onRetry }: ImageCardProps) => {
             </div>
 
             <div>
-              <Label htmlFor={`category-${image.id}`} className="text-xs">
+              <Label htmlFor={`category-${image.id}`} className="text-xs font-medium text-gray-800 dark:text-gray-200">
                 Adobe Stock Category
               </Label>
               <div className="flex items-center space-x-2 mt-1">
@@ -165,7 +165,7 @@ export const ImageCard = ({ image, onRetry }: ImageCardProps) => {
                   id={`category-${image.id}`}
                   value={image.metadata.category}
                   readOnly
-                  className="text-sm"
+                  className="text-sm text-gray-900 dark:text-gray-100"
                 />
                 <Button
                   size="icon"

@@ -53,7 +53,7 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Upload Your Images
@@ -64,7 +64,7 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
       </div>
 
       <div
-        className={`relative border-2 border-dashed rounded-2xl p-12 transition-all duration-300 ${
+        className={`relative border-2 border-dashed rounded-2xl p-8 transition-all duration-300 ${
           isDragOver 
             ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 scale-105' 
             : 'border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500'
@@ -77,16 +77,16 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
         onDragLeave={() => setIsDragOver(false)}
       >
         <div className="text-center space-y-4">
-          <div className={`mx-auto w-16 h-16 rounded-full flex items-center justify-center transition-all ${
+          <div className={`mx-auto w-12 h-12 rounded-full flex items-center justify-center transition-all ${
             isDragOver 
               ? 'bg-blue-500 text-white scale-110' 
               : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
           }`}>
-            {isDragOver ? <Upload className="w-8 h-8" /> : <Image className="w-8 h-8" />}
+            {isDragOver ? <Upload className="w-6 h-6" /> : <Image className="w-6 h-6" />}
           </div>
           
           <div>
-            <p className="text-lg font-semibold">
+            <p className="text-lg font-semibold text-foreground">
               {isDragOver ? 'Drop images here' : 'Drag images here'}
             </p>
             <p className="text-sm text-muted-foreground">
@@ -96,9 +96,10 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
 
           <Button 
             variant="outline" 
-            className="glass"
+            className="liquid-glass border-2 border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400 font-semibold px-6 py-2"
             onClick={() => document.getElementById('file-input')?.click()}
           >
+            <Upload className="w-4 h-4 mr-2" />
             Choose Files
           </Button>
 
