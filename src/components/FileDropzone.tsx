@@ -53,18 +53,18 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
   };
 
   return (
-    <div className="space-y-4 p-6">
+    <div className="space-y-4 p-4">
       <div className="text-center">
-        <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h2 className="text-xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
           Upload Your Images
         </h2>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Drag and drop up to 100 images or click to browse
         </p>
       </div>
 
       <div
-        className={`relative border-2 border-dashed rounded-2xl p-8 transition-all duration-300 ${
+        className={`relative border-2 border-dashed rounded-xl p-6 transition-all duration-300 ${
           isDragOver 
             ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 scale-105' 
             : 'border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500'
@@ -76,40 +76,40 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
         }}
         onDragLeave={() => setIsDragOver(false)}
       >
-        <div className="text-center space-y-4">
-          <div className={`mx-auto w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+        <div className="text-center space-y-3">
+          <div className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center transition-all ${
             isDragOver 
               ? 'bg-blue-500 text-white scale-110' 
               : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
           }`}>
-            {isDragOver ? <Upload className="w-6 h-6" /> : <Image className="w-6 h-6" />}
+            {isDragOver ? <Upload className="w-5 h-5" /> : <Image className="w-5 h-5" />}
           </div>
           
           <div>
-            <p className="text-lg font-semibold text-foreground">
+            <p className="font-semibold text-enhanced">
               {isDragOver ? 'Drop images here' : 'Drag images here'}
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               or click to browse your files
             </p>
           </div>
 
           <Button 
             variant="outline" 
-            className="liquid-glass border-2 border-blue-300 text-blue-700 hover:bg-blue-50 hover:border-blue-400 font-semibold px-6 py-2"
+            className="liquid-button px-6 py-2 font-semibold text-blue-700 border-blue-300 hover:text-blue-800 hover:border-blue-400 relative z-10"
             onClick={() => document.getElementById('file-input')?.click()}
           >
             <Upload className="w-4 h-4 mr-2" />
-            Choose Files
+            <span className="relative z-10">Choose Files</span>
           </Button>
 
           <div className="flex items-center justify-center space-x-4 text-xs text-muted-foreground">
             <div className="flex items-center space-x-1">
-              <AlertCircle className="w-4 h-4" />
+              <AlertCircle className="w-3 h-3" />
               <span>Max 100 images</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Image className="w-4 h-4" />
+              <Image className="w-3 h-3" />
               <span>JPG, PNG, WebP</span>
             </div>
           </div>

@@ -134,14 +134,14 @@ export const AISettings = ({
         
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline" className="glass">
+            <Button variant="outline" className="liquid-button px-4 py-2 font-semibold relative z-10">
               <Settings className="w-4 h-4 mr-2" />
-              API Key Manager
+              <span className="relative z-10">API Key Manager</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-4xl glass max-h-[80vh] overflow-y-auto">
+          <DialogContent className="liquid-glass max-w-4xl max-h-[85vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle className="flex items-center space-x-2">
+              <DialogTitle className="flex items-center space-x-2 text-enhanced">
                 <Key className="w-5 h-5" />
                 <span>API Key Management</span>
               </DialogTitle>
@@ -151,24 +151,24 @@ export const AISettings = ({
               {/* Your API Keys Section */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold">Your API Keys</h3>
-                  <Button onClick={() => setIsAddingKey(true)} className="glass bg-blue-900 hover:bg-blue-800 text-slate-50">
+                  <h3 className="text-lg font-semibold text-enhanced">Your API Keys</h3>
+                  <Button onClick={() => setIsAddingKey(true)} className="liquid-button bg-blue-900 hover:bg-blue-800 text-slate-50 px-4 py-2 relative z-10">
                     <Plus className="w-4 h-4 mr-2" />
-                    Add New API Key
+                    <span className="relative z-10">Add New API Key</span>
                   </Button>
                 </div>
 
-                {apiKeys.length === 0 ? <Card className="glass">
-                    <CardContent className="p-6 text-center text-muted-foreground">
+                {apiKeys.length === 0 ? <Card className="liquid-glass">
+                    <CardContent className="p-6 text-center text-muted-foreground text-enhanced">
                       No API keys added yet. Add your first API key to get started.
                     </CardContent>
                   </Card> : <div className="space-y-3">
-                    {apiKeys.map(apiKey => <Card key={apiKey.id} className="glass">
+                    {apiKeys.map(apiKey => <Card key={apiKey.id} className="liquid-glass">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex-1 space-y-2">
                               <div className="flex items-center space-x-3">
-                                <h4 className="font-medium">{apiKey.nickname}</h4>
+                                <h4 className="font-medium text-enhanced">{apiKey.nickname}</h4>
                                 <span className="text-xs px-2 py-1 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
                                   {AI_MODELS.find(m => m.id === apiKey.model)?.name || apiKey.model}
                                 </span>
@@ -180,15 +180,15 @@ export const AISettings = ({
                                 </div>
                               </div>
                               
-                              <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                              <div className="flex items-center space-x-4 text-sm text-muted-foreground text-enhanced">
                                 <span>Last used: {formatDate(apiKey.lastUsed)}</span>
                                 <span>Requests: {apiKey.requestsMade}</span>
                                 <span>Added: {formatDate(apiKey.createdAt)}</span>
                               </div>
 
                               <div className="flex items-center space-x-2">
-                                <Input type={showKeys[apiKey.id] ? 'text' : 'password'} value={apiKey.key} readOnly className="font-mono text-sm flex-1" />
-                                <Button size="icon" variant="ghost" onClick={() => toggleKeyVisibility(apiKey.id)}>
+                                <Input type={showKeys[apiKey.id] ? 'text' : 'password'} value={apiKey.key} readOnly className="font-mono text-sm flex-1 liquid-glass" />
+                                <Button size="icon" variant="ghost" onClick={() => toggleKeyVisibility(apiKey.id)} className="liquid-button relative z-10">
                                   {showKeys[apiKey.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </Button>
                               </div>
@@ -196,7 +196,7 @@ export const AISettings = ({
 
                             <div className="flex items-center space-x-2 ml-4">
                               <Switch checked={apiKey.isActive} onCheckedChange={() => toggleKeyStatus(apiKey.id)} />
-                              <Button size="icon" variant="destructive" onClick={() => removeApiKey(apiKey.id)}>
+                              <Button size="icon" variant="destructive" onClick={() => removeApiKey(apiKey.id)} className="liquid-button relative z-10">
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
@@ -207,29 +207,29 @@ export const AISettings = ({
               </div>
 
               {/* Add New API Key Form */}
-              {isAddingKey && <Card className="glass border-blue-200 dark:border-blue-800">
+              {isAddingKey && <Card className="liquid-glass border-blue-200 dark:border-blue-800">
                   <CardHeader>
-                    <CardTitle>Add New API Key</CardTitle>
+                    <CardTitle className="text-enhanced">Add New API Key</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label>Nickname</Label>
+                        <Label className="text-enhanced">Nickname</Label>
                         <Input placeholder="e.g., Main, Backup" value={newKey.nickname} onChange={e => setNewKey(prev => ({
                       ...prev,
                       nickname: e.target.value
-                    }))} />
+                    }))} className="liquid-glass" />
                       </div>
                       <div className="space-y-2">
-                        <Label>AI Model</Label>
+                        <Label className="text-enhanced">AI Model</Label>
                         <Select value={newKey.model} onValueChange={value => setNewKey(prev => ({
                       ...prev,
                       model: value
                     }))}>
-                          <SelectTrigger>
+                          <SelectTrigger className="liquid-glass">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="liquid-glass">
                             {AI_MODELS.map(model => <SelectItem key={model.id} value={model.id}>
                                 {model.name}
                               </SelectItem>)}
@@ -238,47 +238,49 @@ export const AISettings = ({
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>API Key</Label>
+                      <Label className="text-enhanced">API Key</Label>
                       <Input type="password" placeholder="Paste your API key here..." value={newKey.key} onChange={e => setNewKey(prev => ({
                     ...prev,
                     key: e.target.value
-                  }))} />
+                  }))} className="liquid-glass" />
                     </div>
                     <div className="flex space-x-2">
-                      <Button onClick={addApiKey}>Add Key</Button>
-                      <Button variant="outline" onClick={() => setIsAddingKey(false)}>
-                        Cancel
+                      <Button onClick={addApiKey} className="liquid-button relative z-10">
+                        <span className="relative z-10">Add Key</span>
+                      </Button>
+                      <Button variant="outline" onClick={() => setIsAddingKey(false)} className="liquid-button relative z-10">
+                        <span className="relative z-10">Cancel</span>
                       </Button>
                     </div>
                   </CardContent>
                 </Card>}
 
               {/* Helper Guide */}
-              <Card className="glass bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
+              <Card className="liquid-glass bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
                 <CardHeader>
-                  <CardTitle className="text-lg">How to get your API key:</CardTitle>
+                  <CardTitle className="text-lg text-enhanced">How to get your API key:</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <div className="space-y-2">
-                    <p className="font-medium">For Google Gemini:</p>
+                    <p className="font-medium text-enhanced">For Google Gemini:</p>
                     <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground ml-4">
-                      <li>Visit <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center">Google AI Studio <ExternalLink className="w-3 h-3 ml-1" /></a></li>
-                      <li>Sign in with your Google account</li>
-                      <li>Click "Create API Key"</li>
-                      <li>Copy & paste the key into the box above</li>
+                      <li className="text-enhanced">Visit <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline inline-flex items-center">Google AI Studio <ExternalLink className="w-3 h-3 ml-1" /></a></li>
+                      <li className="text-enhanced">Sign in with your Google account</li>
+                      <li className="text-enhanced">Click "Create API Key"</li>
+                      <li className="text-enhanced">Copy & paste the key into the box above</li>
                     </ol>
                   </div>
                   
                   <div className="space-y-2">
-                    <p className="font-medium">For Other Providers:</p>
+                    <p className="font-medium text-enhanced">For Other Providers:</p>
                     <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-                      <li><strong>OpenAI:</strong> Visit <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">OpenAI Platform</a></li>
-                      <li><strong>Anthropic:</strong> Visit <a href="https://console.anthropic.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Anthropic Console</a></li>
+                      <li className="text-enhanced"><strong>OpenAI:</strong> Visit <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">OpenAI Platform</a></li>
+                      <li className="text-enhanced"><strong>Anthropic:</strong> Visit <a href="https://console.anthropic.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Anthropic Console</a></li>
                     </ul>
                   </div>
 
-                  <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-950/20 rounded-md">
-                    <p className="text-sm text-yellow-800 dark:text-yellow-200">
+                  <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-950/20 rounded-md liquid-glass">
+                    <p className="text-sm text-yellow-800 dark:text-yellow-200 text-enhanced">
                       💡 <strong>Tip:</strong> Add multiple API keys to avoid rate limiting during bulk processing.
                     </p>
                   </div>
@@ -290,19 +292,19 @@ export const AISettings = ({
       </div>
 
       <div className="flex items-center space-x-4">
-        <Label htmlFor="model-select" className="text-sm font-medium">
+        <Label htmlFor="model-select" className="text-sm font-medium text-enhanced">
           AI Model:
         </Label>
         <Select value={selectedModel} onValueChange={onModelChange}>
-          <SelectTrigger id="model-select" className="w-64 glass">
+          <SelectTrigger id="model-select" className="w-64 liquid-glass">
             <SelectValue placeholder="Select AI model" />
           </SelectTrigger>
-          <SelectContent className="glass bg-white/90 dark:bg-black/90 backdrop-blur-xl">
+          <SelectContent className="liquid-glass bg-white/90 dark:bg-black/90 backdrop-blur-xl">
             {AI_MODELS.map(model => {
             const activeKeys = getActiveKeysForModel(model.id);
             return <SelectItem key={model.id} value={model.id}>
                   <div className="flex items-center justify-between w-full">
-                    <span>{model.name}</span>
+                    <span className="text-enhanced">{model.name}</span>
                     <span className="text-xs text-muted-foreground ml-2">
                       {activeKeys.length > 0 ? `✓ ${activeKeys.length}` : '⚠️'}
                     </span>
@@ -312,7 +314,7 @@ export const AISettings = ({
           </SelectContent>
         </Select>
         
-        {getActiveKeysForModel(selectedModel).length === 0 && <span className="text-sm text-orange-500 flex items-center">
+        {getActiveKeysForModel(selectedModel).length === 0 && <span className="text-sm text-orange-500 flex items-center text-enhanced">
             <AlertCircle className="w-4 h-4 mr-1" />
             API key required
           </span>}
