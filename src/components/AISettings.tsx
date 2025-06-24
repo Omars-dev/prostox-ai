@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Settings, Key, Eye, EyeOff } from 'lucide-react';
+import { Settings, Key, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
