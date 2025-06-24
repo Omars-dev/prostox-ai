@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Settings, Key, Eye, EyeOff, AlertCircle, Plus, Trash2, ToggleLeft, ToggleRight, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-
 interface APIKey {
   id: string;
   nickname: string;
@@ -20,34 +18,49 @@ interface APIKey {
   isActive: boolean;
   createdAt: string;
 }
-
 interface AISettingsProps {
   selectedModel: string;
   onModelChange: (model: string) => void;
 }
-
-const AI_MODELS = [
-  { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash', provider: 'Google' },
-  { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', provider: 'Anthropic' },
-  { id: 'gpt-4o', name: 'GPT-4o', provider: 'OpenAI' },
-  { id: 'gpt-4o-mini', name: 'GPT-4o Mini', provider: 'OpenAI' },
-];
-
-export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) => {
+const AI_MODELS = [{
+  id: 'gemini-2.0-flash',
+  name: 'Gemini 2.0 Flash',
+  provider: 'Google'
+}, {
+  id: 'claude-3-5-sonnet',
+  name: 'Claude 3.5 Sonnet',
+  provider: 'Anthropic'
+}, {
+  id: 'gpt-4o',
+  name: 'GPT-4o',
+  provider: 'OpenAI'
+}, {
+  id: 'gpt-4o-mini',
+  name: 'GPT-4o Mini',
+  provider: 'OpenAI'
+}];
+export const AISettings = ({
+  selectedModel,
+  onModelChange
+}: AISettingsProps) => {
   const [apiKeys, setApiKeys] = useState<APIKey[]>(() => {
     const stored = localStorage.getItem('prostoxai_api_keys_v2');
     return stored ? JSON.parse(stored) : [];
   });
   const [showKeys, setShowKeys] = useState<Record<string, boolean>>({});
-  const [newKey, setNewKey] = useState({ nickname: '', key: '', model: selectedModel });
+  const [newKey, setNewKey] = useState({
+    nickname: '',
+    key: '',
+    model: selectedModel
+  });
   const [isAddingKey, setIsAddingKey] = useState(false);
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   const saveApiKeys = (keys: APIKey[]) => {
     setApiKeys(keys);
     localStorage.setItem('prostoxai_api_keys_v2', JSON.stringify(keys));
   };
-
   const addApiKey = () => {
     if (!newKey.nickname.trim() || !newKey.key.trim()) {
       toast({
@@ -57,7 +70,6 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
       });
       return;
     }
-
     const apiKey: APIKey = {
       id: crypto.randomUUID(),
       nickname: newKey.nickname.trim(),
@@ -68,18 +80,19 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
       isActive: true,
       createdAt: new Date().toISOString()
     };
-
     const updatedKeys = [...apiKeys, apiKey];
     saveApiKeys(updatedKeys);
-    setNewKey({ nickname: '', key: '', model: selectedModel });
+    setNewKey({
+      nickname: '',
+      key: '',
+      model: selectedModel
+    });
     setIsAddingKey(false);
-
     toast({
       title: "API Key Added",
       description: `${apiKey.nickname} has been added successfully.`
     });
   };
-
   const removeApiKey = (id: string) => {
     const updatedKeys = apiKeys.filter(key => key.id !== id);
     saveApiKeys(updatedKeys);
@@ -88,29 +101,27 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
       description: "API key has been removed successfully."
     });
   };
-
   const toggleKeyStatus = (id: string) => {
-    const updatedKeys = apiKeys.map(key => 
-      key.id === id ? { ...key, isActive: !key.isActive } : key
-    );
+    const updatedKeys = apiKeys.map(key => key.id === id ? {
+      ...key,
+      isActive: !key.isActive
+    } : key);
     saveApiKeys(updatedKeys);
   };
-
   const toggleKeyVisibility = (id: string) => {
-    setShowKeys(prev => ({ ...prev, [id]: !prev[id] }));
+    setShowKeys(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
-
   const getActiveKeysForModel = (model: string) => {
     return apiKeys.filter(key => key.model === model && key.isActive);
   };
-
   const formatDate = (dateString: string) => {
     if (dateString === 'Never') return 'Never';
     return new Date(dateString).toLocaleDateString();
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -141,25 +152,18 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold">Your API Keys</h3>
-                  <Button 
-                    onClick={() => setIsAddingKey(true)}
-                    className="glass"
-                  >
+                  <Button onClick={() => setIsAddingKey(true)} className="glass bg-blue-900 hover:bg-blue-800 text-slate-50">
                     <Plus className="w-4 h-4 mr-2" />
                     Add New API Key
                   </Button>
                 </div>
 
-                {apiKeys.length === 0 ? (
-                  <Card className="glass">
+                {apiKeys.length === 0 ? <Card className="glass">
                     <CardContent className="p-6 text-center text-muted-foreground">
                       No API keys added yet. Add your first API key to get started.
                     </CardContent>
-                  </Card>
-                ) : (
-                  <div className="space-y-3">
-                    {apiKeys.map(apiKey => (
-                      <Card key={apiKey.id} className="glass">
+                  </Card> : <div className="space-y-3">
+                    {apiKeys.map(apiKey => <Card key={apiKey.id} className="glass">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex-1 space-y-2">
@@ -169,11 +173,7 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
                                   {AI_MODELS.find(m => m.id === apiKey.model)?.name || apiKey.model}
                                 </span>
                                 <div className="flex items-center space-x-1">
-                                  {apiKey.isActive ? (
-                                    <ToggleRight className="w-4 h-4 text-green-500" />
-                                  ) : (
-                                    <ToggleLeft className="w-4 h-4 text-gray-400" />
-                                  )}
+                                  {apiKey.isActive ? <ToggleRight className="w-4 h-4 text-green-500" /> : <ToggleLeft className="w-4 h-4 text-gray-400" />}
                                   <span className={`text-xs ${apiKey.isActive ? 'text-green-600' : 'text-gray-500'}`}>
                                     {apiKey.isActive ? 'Active' : 'Deactivated'}
                                   </span>
@@ -187,46 +187,27 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
                               </div>
 
                               <div className="flex items-center space-x-2">
-                                <Input
-                                  type={showKeys[apiKey.id] ? 'text' : 'password'}
-                                  value={apiKey.key}
-                                  readOnly
-                                  className="font-mono text-sm flex-1"
-                                />
-                                <Button
-                                  size="icon"
-                                  variant="ghost"
-                                  onClick={() => toggleKeyVisibility(apiKey.id)}
-                                >
+                                <Input type={showKeys[apiKey.id] ? 'text' : 'password'} value={apiKey.key} readOnly className="font-mono text-sm flex-1" />
+                                <Button size="icon" variant="ghost" onClick={() => toggleKeyVisibility(apiKey.id)}>
                                   {showKeys[apiKey.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </Button>
                               </div>
                             </div>
 
                             <div className="flex items-center space-x-2 ml-4">
-                              <Switch
-                                checked={apiKey.isActive}
-                                onCheckedChange={() => toggleKeyStatus(apiKey.id)}
-                              />
-                              <Button
-                                size="icon"
-                                variant="destructive"
-                                onClick={() => removeApiKey(apiKey.id)}
-                              >
+                              <Switch checked={apiKey.isActive} onCheckedChange={() => toggleKeyStatus(apiKey.id)} />
+                              <Button size="icon" variant="destructive" onClick={() => removeApiKey(apiKey.id)}>
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
                           </div>
                         </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                )}
+                      </Card>)}
+                  </div>}
               </div>
 
               {/* Add New API Key Form */}
-              {isAddingKey && (
-                <Card className="glass border-blue-200 dark:border-blue-800">
+              {isAddingKey && <Card className="glass border-blue-200 dark:border-blue-800">
                   <CardHeader>
                     <CardTitle>Add New API Key</CardTitle>
                   </CardHeader>
@@ -234,39 +215,34 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label>Nickname</Label>
-                        <Input
-                          placeholder="e.g., Main, Backup"
-                          value={newKey.nickname}
-                          onChange={(e) => setNewKey(prev => ({ ...prev, nickname: e.target.value }))}
-                        />
+                        <Input placeholder="e.g., Main, Backup" value={newKey.nickname} onChange={e => setNewKey(prev => ({
+                      ...prev,
+                      nickname: e.target.value
+                    }))} />
                       </div>
                       <div className="space-y-2">
                         <Label>AI Model</Label>
-                        <Select 
-                          value={newKey.model} 
-                          onValueChange={(value) => setNewKey(prev => ({ ...prev, model: value }))}
-                        >
+                        <Select value={newKey.model} onValueChange={value => setNewKey(prev => ({
+                      ...prev,
+                      model: value
+                    }))}>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            {AI_MODELS.map(model => (
-                              <SelectItem key={model.id} value={model.id}>
+                            {AI_MODELS.map(model => <SelectItem key={model.id} value={model.id}>
                                 {model.name}
-                              </SelectItem>
-                            ))}
+                              </SelectItem>)}
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label>API Key</Label>
-                      <Input
-                        type="password"
-                        placeholder="Paste your API key here..."
-                        value={newKey.key}
-                        onChange={(e) => setNewKey(prev => ({ ...prev, key: e.target.value }))}
-                      />
+                      <Input type="password" placeholder="Paste your API key here..." value={newKey.key} onChange={e => setNewKey(prev => ({
+                    ...prev,
+                    key: e.target.value
+                  }))} />
                     </div>
                     <div className="flex space-x-2">
                       <Button onClick={addApiKey}>Add Key</Button>
@@ -275,8 +251,7 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
                       </Button>
                     </div>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
 
               {/* Helper Guide */}
               <Card className="glass bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
@@ -324,28 +299,23 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
           </SelectTrigger>
           <SelectContent className="glass bg-white/90 dark:bg-black/90 backdrop-blur-xl">
             {AI_MODELS.map(model => {
-              const activeKeys = getActiveKeysForModel(model.id);
-              return (
-                <SelectItem key={model.id} value={model.id}>
+            const activeKeys = getActiveKeysForModel(model.id);
+            return <SelectItem key={model.id} value={model.id}>
                   <div className="flex items-center justify-between w-full">
                     <span>{model.name}</span>
                     <span className="text-xs text-muted-foreground ml-2">
                       {activeKeys.length > 0 ? `✓ ${activeKeys.length}` : '⚠️'}
                     </span>
                   </div>
-                </SelectItem>
-              );
-            })}
+                </SelectItem>;
+          })}
           </SelectContent>
         </Select>
         
-        {getActiveKeysForModel(selectedModel).length === 0 && (
-          <span className="text-sm text-orange-500 flex items-center">
+        {getActiveKeysForModel(selectedModel).length === 0 && <span className="text-sm text-orange-500 flex items-center">
             <AlertCircle className="w-4 h-4 mr-1" />
             API key required
-          </span>
-        )}
+          </span>}
       </div>
-    </div>
-  );
+    </div>;
 };
