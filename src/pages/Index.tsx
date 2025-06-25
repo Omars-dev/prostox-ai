@@ -1,9 +1,9 @@
+
 import { useState, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { FileDropzone } from '@/components/FileDropzone';
 import { ImageCard } from '@/components/ImageCard';
 import { AISettings } from '@/components/AISettings';
-import { ExportSection } from '@/components/ExportSection';
 import { ProcessingStatus } from '@/components/ProcessingStatus';
 import { useToast } from '@/hooks/use-toast';
 import { processImageWithAI } from '@/lib/aiService';
@@ -293,10 +293,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900 dark:to-blue-900">
+    <div className="min-h-screen">
       <Header />
       
-      <main className="container mx-auto px-4 py-8 space-y-8">
+      <main className="container mx-auto px-4 py-6 space-y-6 max-w-7xl">
         {/* AI Settings */}
         <div className="liquid-glass rounded-2xl p-6 shadow-xl">
           <AISettings 
@@ -325,10 +325,10 @@ const Index = () => {
         {/* Images Grid */}
         {images.length > 0 && (
           <div className="liquid-glass rounded-2xl p-6 shadow-xl">
-            <h2 className="text-2xl font-bold mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold mb-6 text-center text-enhanced">
               Uploaded Images ({images.length})
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+            <div className="responsive-grid">
               {images.map(image => (
                 <ImageCard 
                   key={image.id} 
