@@ -29,10 +29,10 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
       return;
     }
 
-    if (files.length > 100) {
+    if (files.length > 1000) {
       toast({
         title: "Too many files",
-        description: "Maximum 100 images allowed at once.",
+        description: "Maximum 1000 images allowed at once.",
         variant: "destructive",
       });
       return;
@@ -59,7 +59,7 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
           Upload Your Images
         </h2>
         <p className="text-muted-foreground text-sm">
-          Drag and drop up to 100 images or click to browse
+          Drag and drop up to 1000 images or click to browse
         </p>
       </div>
 
@@ -107,7 +107,7 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
           <div className="flex items-center justify-center space-x-3 text-xs text-muted-foreground">
             <div className="flex items-center space-x-1">
               <AlertCircle className="w-3 h-3" />
-              <span>Max 100 images</span>
+              <span>Max 1000 images</span>
             </div>
             <div className="flex items-center space-x-1">
               <Image className="w-3 h-3" />

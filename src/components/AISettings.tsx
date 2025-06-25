@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
+
 interface APIKey {
   id: string;
   nickname: string;
@@ -18,31 +19,20 @@ interface APIKey {
   isActive: boolean;
   createdAt: string;
 }
+
 interface AISettingsProps {
   selectedModel: string;
   onModelChange: (model: string) => void;
 }
-const AI_MODELS = [{
-  id: 'gemini-2.0-flash',
-  name: 'Gemini 2.0 Flash',
-  provider: 'Google'
-}, {
-  id: 'claude-3-5-sonnet',
-  name: 'Claude 3.5 Sonnet',
-  provider: 'Anthropic'
-}, {
-  id: 'gpt-4o',
-  name: 'GPT-4o',
-  provider: 'OpenAI'
-}, {
-  id: 'gpt-4o-mini',
-  name: 'GPT-4o Mini',
-  provider: 'OpenAI'
-}];
-export const AISettings = ({
-  selectedModel,
-  onModelChange
-}: AISettingsProps) => {
+
+const AI_MODELS = [
+  { id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash', provider: 'Google' },
+  { id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', provider: 'Anthropic' },
+  { id: 'gpt-4o', name: 'GPT-4o', provider: 'OpenAI' },
+  { id: 'gpt-4o-mini', name: 'GPT-4o Mini', provider: 'OpenAI' }
+];
+
+export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) => {
   const [apiKeys, setApiKeys] = useState<APIKey[]>(() => {
     const stored = localStorage.getItem('prostoxai_api_keys_v2');
     return stored ? JSON.parse(stored) : [];
@@ -54,13 +44,13 @@ export const AISettings = ({
     model: selectedModel
   });
   const [isAddingKey, setIsAddingKey] = useState(false);
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+
   const saveApiKeys = (keys: APIKey[]) => {
     setApiKeys(keys);
     localStorage.setItem('prostoxai_api_keys_v2', JSON.stringify(keys));
   };
+
   const addApiKey = () => {
     if (!newKey.nickname.trim() || !newKey.key.trim()) {
       toast({
@@ -70,6 +60,7 @@ export const AISettings = ({
       });
       return;
     }
+
     const apiKey: APIKey = {
       id: crypto.randomUUID(),
       nickname: newKey.nickname.trim(),
@@ -80,6 +71,7 @@ export const AISettings = ({
       isActive: true,
       createdAt: new Date().toISOString()
     };
+
     const updatedKeys = [...apiKeys, apiKey];
     saveApiKeys(updatedKeys);
     setNewKey({
@@ -88,11 +80,13 @@ export const AISettings = ({
       model: selectedModel
     });
     setIsAddingKey(false);
+
     toast({
       title: "API Key Added",
       description: `${apiKey.nickname} has been added successfully.`
     });
   };
+
   const removeApiKey = (id: string) => {
     const updatedKeys = apiKeys.filter(key => key.id !== id);
     saveApiKeys(updatedKeys);
@@ -101,27 +95,32 @@ export const AISettings = ({
       description: "API key has been removed successfully."
     });
   };
+
   const toggleKeyStatus = (id: string) => {
-    const updatedKeys = apiKeys.map(key => key.id === id ? {
-      ...key,
-      isActive: !key.isActive
-    } : key);
+    const updatedKeys = apiKeys.map(key => 
+      key.id === id ? { ...key, isActive: !key.isActive } : key
+    );
     saveApiKeys(updatedKeys);
   };
+
   const toggleKeyVisibility = (id: string) => {
     setShowKeys(prev => ({
       ...prev,
       [id]: !prev[id]
     }));
   };
+
   const getActiveKeysForModel = (model: string) => {
     return apiKeys.filter(key => key.model === model && key.isActive);
   };
+
   const formatDate = (dateString: string) => {
     if (dateString === 'Never') return 'Never';
     return new Date(dateString).toLocaleDateString();
   };
-  return <div className="space-y-6">
+
+  return (
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -136,10 +135,10 @@ export const AISettings = ({
           <DialogTrigger asChild>
             <Button variant="outline" className="liquid-button px-4 py-2 font-semibold relative z-10">
               <Settings className="w-4 h-4 mr-2" />
-              <span className="relative z-10">API Key Manager</span>
+              <span className="relative z-10 text-enhanced">API Key Manager</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="liquid-glass max-w-4xl max-h-[85vh] overflow-y-auto">
+          <DialogContent className="liquid-glass max-w-4xl max-h-[85vh] overflow-y-auto modal-top-positioned">
             <DialogHeader>
               <DialogTitle className="flex items-center space-x-2 text-enhanced">
                 <Key className="w-5 h-5" />
@@ -148,22 +147,28 @@ export const AISettings = ({
             </DialogHeader>
             
             <div className="space-y-6">
-              {/* Your API Keys Section */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-enhanced">Your API Keys</h3>
-                  <Button onClick={() => setIsAddingKey(true)} className="liquid-button bg-blue-900 hover:bg-blue-800 text-slate-50 px-4 py-2 relative z-10">
+                  <Button 
+                    onClick={() => setIsAddingKey(true)} 
+                    className="liquid-button bg-blue-900 hover:bg-blue-800 text-slate-50 px-4 py-2 relative z-10"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     <span className="relative z-10">Add New API Key</span>
                   </Button>
                 </div>
 
-                {apiKeys.length === 0 ? <Card className="liquid-glass">
+                {apiKeys.length === 0 ? (
+                  <Card className="liquid-glass">
                     <CardContent className="p-6 text-center text-muted-foreground text-enhanced">
                       No API keys added yet. Add your first API key to get started.
                     </CardContent>
-                  </Card> : <div className="space-y-3">
-                    {apiKeys.map(apiKey => <Card key={apiKey.id} className="liquid-glass">
+                  </Card>
+                ) : (
+                  <div className="space-y-3">
+                    {apiKeys.map(apiKey => (
+                      <Card key={apiKey.id} className="liquid-glass">
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">
                             <div className="flex-1 space-y-2">
@@ -173,7 +178,11 @@ export const AISettings = ({
                                   {AI_MODELS.find(m => m.id === apiKey.model)?.name || apiKey.model}
                                 </span>
                                 <div className="flex items-center space-x-1">
-                                  {apiKey.isActive ? <ToggleRight className="w-4 h-4 text-green-500" /> : <ToggleLeft className="w-4 h-4 text-gray-400" />}
+                                  {apiKey.isActive ? (
+                                    <ToggleRight className="w-4 h-4 text-green-500" />
+                                  ) : (
+                                    <ToggleLeft className="w-4 h-4 text-gray-400" />
+                                  )}
                                   <span className={`text-xs ${apiKey.isActive ? 'text-green-600' : 'text-gray-500'}`}>
                                     {apiKey.isActive ? 'Active' : 'Deactivated'}
                                   </span>
@@ -187,27 +196,47 @@ export const AISettings = ({
                               </div>
 
                               <div className="flex items-center space-x-2">
-                                <Input type={showKeys[apiKey.id] ? 'text' : 'password'} value={apiKey.key} readOnly className="font-mono text-sm flex-1 liquid-glass" />
-                                <Button size="icon" variant="ghost" onClick={() => toggleKeyVisibility(apiKey.id)} className="liquid-button relative z-10">
+                                <Input 
+                                  type={showKeys[apiKey.id] ? 'text' : 'password'}
+                                  value={apiKey.key}
+                                  readOnly
+                                  className="font-mono text-sm flex-1 liquid-glass"
+                                />
+                                <Button 
+                                  size="icon" 
+                                  variant="ghost" 
+                                  onClick={() => toggleKeyVisibility(apiKey.id)}
+                                  className="liquid-button relative z-10"
+                                >
                                   {showKeys[apiKey.id] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </Button>
                               </div>
                             </div>
 
                             <div className="flex items-center space-x-2 ml-4">
-                              <Switch checked={apiKey.isActive} onCheckedChange={() => toggleKeyStatus(apiKey.id)} />
-                              <Button size="icon" variant="destructive" onClick={() => removeApiKey(apiKey.id)} className="liquid-button relative z-10">
+                              <Switch 
+                                checked={apiKey.isActive}
+                                onCheckedChange={() => toggleKeyStatus(apiKey.id)}
+                              />
+                              <Button 
+                                size="icon" 
+                                variant="destructive" 
+                                onClick={() => removeApiKey(apiKey.id)}
+                                className="liquid-button relative z-10"
+                              >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
                           </div>
                         </CardContent>
-                      </Card>)}
-                  </div>}
+                      </Card>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {/* Add New API Key Form */}
-              {isAddingKey && <Card className="liquid-glass border-blue-200 dark:border-blue-800">
+              {isAddingKey && (
+                <Card className="liquid-glass border-blue-200 dark:border-blue-800">
                   <CardHeader>
                     <CardTitle className="text-enhanced">Add New API Key</CardTitle>
                   </CardHeader>
@@ -215,47 +244,58 @@ export const AISettings = ({
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="text-enhanced">Nickname</Label>
-                        <Input placeholder="e.g., Main, Backup" value={newKey.nickname} onChange={e => setNewKey(prev => ({
-                      ...prev,
-                      nickname: e.target.value
-                    }))} className="liquid-glass" />
+                        <Input 
+                          placeholder="e.g., Main, Backup"
+                          value={newKey.nickname}
+                          onChange={(e) => setNewKey(prev => ({ ...prev, nickname: e.target.value }))}
+                          className="liquid-glass"
+                        />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-enhanced">AI Model</Label>
-                        <Select value={newKey.model} onValueChange={value => setNewKey(prev => ({
-                      ...prev,
-                      model: value
-                    }))}>
+                        <Select 
+                          value={newKey.model} 
+                          onValueChange={(value) => setNewKey(prev => ({ ...prev, model: value }))}
+                        >
                           <SelectTrigger className="liquid-glass">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="liquid-glass">
-                            {AI_MODELS.map(model => <SelectItem key={model.id} value={model.id}>
+                            {AI_MODELS.map(model => (
+                              <SelectItem key={model.id} value={model.id}>
                                 {model.name}
-                              </SelectItem>)}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <Label className="text-enhanced">API Key</Label>
-                      <Input type="password" placeholder="Paste your API key here..." value={newKey.key} onChange={e => setNewKey(prev => ({
-                    ...prev,
-                    key: e.target.value
-                  }))} className="liquid-glass" />
+                      <Input 
+                        type="password"
+                        placeholder="Paste your API key here..."
+                        value={newKey.key}
+                        onChange={(e) => setNewKey(prev => ({ ...prev, key: e.target.value }))}
+                        className="liquid-glass"
+                      />
                     </div>
                     <div className="flex space-x-2">
                       <Button onClick={addApiKey} className="liquid-button relative z-10">
                         <span className="relative z-10">Add Key</span>
                       </Button>
-                      <Button variant="outline" onClick={() => setIsAddingKey(false)} className="liquid-button relative z-10">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => setIsAddingKey(false)} 
+                        className="liquid-button relative z-10"
+                      >
                         <span className="relative z-10">Cancel</span>
                       </Button>
                     </div>
                   </CardContent>
-                </Card>}
+                </Card>
+              )}
 
-              {/* Helper Guide */}
               <Card className="liquid-glass bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
                 <CardHeader>
                   <CardTitle className="text-lg text-enhanced">How to get your API key:</CardTitle>
@@ -301,23 +341,28 @@ export const AISettings = ({
           </SelectTrigger>
           <SelectContent className="liquid-glass bg-white/90 dark:bg-black/90 backdrop-blur-xl">
             {AI_MODELS.map(model => {
-            const activeKeys = getActiveKeysForModel(model.id);
-            return <SelectItem key={model.id} value={model.id}>
+              const activeKeys = getActiveKeysForModel(model.id);
+              return (
+                <SelectItem key={model.id} value={model.id}>
                   <div className="flex items-center justify-between w-full">
                     <span className="text-enhanced">{model.name}</span>
                     <span className="text-xs text-muted-foreground ml-2">
                       {activeKeys.length > 0 ? `✓ ${activeKeys.length}` : '⚠️'}
                     </span>
                   </div>
-                </SelectItem>;
-          })}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
         
-        {getActiveKeysForModel(selectedModel).length === 0 && <span className="text-sm text-orange-500 flex items-center text-enhanced">
+        {getActiveKeysForModel(selectedModel).length === 0 && (
+          <span className="text-sm text-orange-500 flex items-center text-enhanced">
             <AlertCircle className="w-4 h-4 mr-1" />
             API key required
-          </span>}
+          </span>
+        )}
       </div>
-    </div>;
+    </div>
+  );
 };
