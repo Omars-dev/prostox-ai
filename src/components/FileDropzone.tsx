@@ -53,18 +53,18 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
   };
 
   return (
-    <div className="space-y-3 p-4">
-      <div className="text-center">
-        <h2 className="text-lg font-bold mb-1 text-enhanced">
+    <div className="compact-upload cta-animated">
+      <div className="upload-header text-center">
+        <h2 className="font-bold text-enhanced">
           Upload Your Images
         </h2>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-muted-foreground">
           Drag and drop up to 1000 images or click to browse
         </p>
       </div>
 
       <div
-        className={`relative border-2 border-dashed rounded-xl p-4 transition-all duration-300 ${
+        className={`upload-zone relative border-2 border-dashed rounded-xl transition-all duration-300 ${
           isDragOver 
             ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 scale-[1.02]' 
             : 'border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500'
@@ -76,17 +76,17 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
         }}
         onDragLeave={() => setIsDragOver(false)}
       >
-        <div className="text-center space-y-2">
-          <div className={`mx-auto w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+        <div className="text-center space-y-3">
+          <div className={`mx-auto w-10 h-10 rounded-full flex items-center justify-center transition-all ${
             isDragOver 
               ? 'bg-blue-500 text-white scale-110' 
               : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
           }`}>
-            {isDragOver ? <Upload className="w-4 h-4" /> : <Image className="w-4 h-4" />}
+            {isDragOver ? <Upload className="w-5 h-5" /> : <Image className="w-5 h-5" />}
           </div>
           
           <div>
-            <p className="font-semibold text-enhanced text-sm">
+            <p className="font-semibold text-enhanced">
               {isDragOver ? 'Drop images here' : 'Drag images here'}
             </p>
             <p className="text-xs text-muted-foreground">
@@ -97,22 +97,22 @@ export const FileDropzone = ({ onFilesAdded }: FileDropzoneProps) => {
           <Button 
             variant="outline" 
             size="sm"
-            className="liquid-button px-4 py-2 font-semibold border-2 border-blue-300 hover:border-blue-400 relative z-10"
+            className="liquid-button px-6 py-2 font-semibold border-2 border-blue-300 hover:border-blue-400 relative z-10"
             onClick={() => document.getElementById('file-input')?.click()}
           >
             <Upload className="w-4 h-4 mr-2" />
             <span className="relative z-10 text-enhanced">Choose Files</span>
           </Button>
+        </div>
 
-          <div className="flex items-center justify-center space-x-3 text-xs text-muted-foreground">
-            <div className="flex items-center space-x-1">
-              <AlertCircle className="w-3 h-3" />
-              <span>Max 1000 images</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Image className="w-3 h-3" />
-              <span>JPG, PNG, WebP</span>
-            </div>
+        <div className="upload-info flex items-center justify-center space-x-4 text-xs text-muted-foreground mt-4">
+          <div className="flex items-center space-x-1">
+            <AlertCircle className="w-3 h-3" />
+            <span>Max 1000 images</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Image className="w-3 h-3" />
+            <span>JPG, PNG, WebP</span>
           </div>
         </div>
 

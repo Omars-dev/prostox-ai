@@ -71,47 +71,55 @@
   }
 }
 
-/* Animated Background */
+/* Simple Background */
 body {
   position: relative;
   overflow-x: hidden;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
-body::before {
+.dark body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* CTA Animated Background */
+.cta-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-animated::before {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 0;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.05) 0%,
-    rgba(147, 51, 234, 0.05) 25%,
-    rgba(239, 68, 68, 0.05) 50%,
-    rgba(34, 197, 94, 0.05) 75%,
-    rgba(59, 130, 246, 0.05) 100%
+    rgba(59, 130, 246, 0.1) 0%,
+    rgba(147, 51, 234, 0.1) 25%,
+    rgba(239, 68, 68, 0.1) 50%,
+    rgba(34, 197, 94, 0.1) 75%,
+    rgba(59, 130, 246, 0.1) 100%
   );
   background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+  animation: gradientShift 8s ease infinite;
 }
 
-/* Animated gradient orbs */
-body::after {
+.cta-animated::after {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 1;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 70%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
-  animation: orbMove 20s ease-in-out infinite;
+    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.15) 0%, transparent 50%);
+  animation: orbMove 12s ease-in-out infinite;
 }
 
 @keyframes gradientShift {
@@ -122,43 +130,25 @@ body::after {
 @keyframes orbMove {
   0%, 100% { 
     background: 
-      radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 40% 70%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
-  }
-  25% { 
-    background: 
-      radial-gradient(circle at 80% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 90% 20%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 10% 70%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+      radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.15) 0%, transparent 50%);
   }
   50% { 
     background: 
-      radial-gradient(circle at 70% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 30% 20%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 10% 40%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 90% 30%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
-  }
-  75% { 
-    background: 
-      radial-gradient(circle at 30% 70%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 70% 30%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 20% 80%, rgba(239, 68, 68, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 70%, rgba(34, 197, 94, 0.1) 0%, transparent 50%);
+      radial-gradient(circle at 80% 20%, rgba(239, 68, 68, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 50%);
   }
 }
 
 /* Enhanced Liquid Glass Effect */
 .liquid-glass {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   position: relative;
   overflow: hidden;
 }
@@ -173,10 +163,11 @@ body::after {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0.15),
     transparent
   );
-  animation: shimmer 3s infinite;
+  animation: shimmer 4s infinite;
+  z-index: 1;
 }
 
 @keyframes shimmer {
@@ -185,11 +176,11 @@ body::after {
 }
 
 .dark .liquid-glass {
-  background: rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Enhanced Button Styling */
@@ -197,17 +188,18 @@ body::after {
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: rgb(30, 41, 59) !important;
   font-weight: 600;
+  z-index: 10;
 }
 
 .liquid-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-1px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
   color: rgb(15, 23, 42) !important;
@@ -223,17 +215,18 @@ body::after {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.3),
     transparent
   );
   transition: left 0.5s ease;
+  z-index: -1;
 }
 
 .liquid-button:hover::before {
   left: 100%;
 }
 
-.liquid-button span {
+.liquid-button * {
   position: relative;
   z-index: 10;
   color: inherit !important;
@@ -241,35 +234,43 @@ body::after {
 
 .dark .liquid-button {
   color: rgb(226, 232, 240) !important;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .dark .liquid-button:hover {
-  background: rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.25);
   color: rgb(248, 250, 252) !important;
 }
 
 /* Enhanced Text Visibility */
 .text-enhanced {
   color: rgb(30, 41, 59) !important;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .dark .text-enhanced {
   color: rgb(226, 232, 240) !important;
 }
 
-/* Modal Positioning */
+/* Modal Positioning - Top Centered */
 .modal-top-positioned {
   position: fixed !important;
-  top: 5vh !important;
+  top: 2vh !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  max-height: 90vh !important;
+  max-height: 96vh !important;
   width: 90vw !important;
-  max-width: 1000px !important;
+  max-width: 800px !important;
+  overflow-y: auto !important;
+  z-index: 9999 !important;
+}
+
+/* Modal Content Scrollable */
+.modal-content-scrollable {
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 /* Image Grid Responsive */
@@ -322,6 +323,33 @@ body::after {
   @apply liquid-glass rounded-xl p-6 transition-all duration-300;
 }
 
+/* Compact Upload Section */
+.compact-upload {
+  padding: 1.5rem !important;
+}
+
+.compact-upload .upload-header {
+  margin-bottom: 1rem;
+}
+
+.compact-upload .upload-header h2 {
+  font-size: 1.25rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.compact-upload .upload-header p {
+  font-size: 0.875rem !important;
+}
+
+.compact-upload .upload-zone {
+  padding: 2rem 1rem !important;
+  margin-bottom: 1rem;
+}
+
+.compact-upload .upload-info {
+  gap: 0.5rem !important;
+}
+
 /* Mobile Responsive Adjustments */
 @media (max-width: 768px) {
   .responsive-grid {
@@ -330,28 +358,23 @@ body::after {
   }
   
   .modal-top-positioned {
-    top: 2vh !important;
+    top: 1vh !important;
     width: 95vw !important;
-    max-height: 96vh !important;
+    max-height: 98vh !important;
   }
   
   .liquid-button {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
   }
-}
-
-/* Compact Upload Section */
-.compact-upload {
-  padding: 1rem !important;
-}
-
-.compact-upload .text-center {
-  margin-bottom: 0.75rem;
-}
-
-.compact-upload .space-y-2 > * + * {
-  margin-top: 0.5rem;
+  
+  .compact-upload {
+    padding: 1rem !important;
+  }
+  
+  .compact-upload .upload-zone {
+    padding: 1.5rem 0.75rem !important;
+  }
 }
 
 /* Enhanced Dialog Positioning */
@@ -363,4 +386,14 @@ body::after {
 [data-radix-dialog-overlay] {
   background-color: rgba(0, 0, 0, 0.6) !important;
   backdrop-filter: blur(4px) !important;
+}
+
+/* Dialog Content Override */
+[data-radix-dialog-content] {
+  position: fixed !important;
+  top: 2vh !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  max-height: 96vh !important;
+  overflow-y: auto !important;
 }
