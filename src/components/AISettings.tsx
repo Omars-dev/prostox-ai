@@ -1,9 +1,11 @@
+
 import { useState, useEffect } from 'react';
-import { Settings, Plus, Trash2 } from 'lucide-react';
+import { Settings, Plus, Trash2, Eye, EyeOff } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 
@@ -20,6 +22,7 @@ interface ApiKey {
   isActive: boolean;
   lastUsed?: string;
   requestsMade: number;
+  addedDate: string;
 }
 
 const AVAILABLE_MODELS = [
@@ -32,6 +35,7 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [newKey, setNewKey] = useState({ model: '', key: '', name: '' });
+  const [visibleKeys, setVisibleKeys] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   useEffect(() => {
@@ -60,8 +64,9 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
       model: newKey.model,
       key: newKey.key,
       name: newKey.name,
-      isActive: false,
+      isActive: apiKeys.filter(k => k.model === newKey.model).length === 0,
       requestsMade: 0,
+      addedDate: new Date().toLocaleDateString(),
     };
 
     setApiKeys(prev => [...prev, newApiKey]);
@@ -74,28 +79,47 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
 
   const handleDeleteKey = (id: string) => {
     setApiKeys(prev => prev.filter(key => key.id !== id));
+    setVisibleKeys(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(id);
+      return newSet;
+    });
     toast({
       title: "API Key Deleted",
       description: "API key has been deleted.",
     });
   };
 
-  const handleSetActive = (id: string) => {
+  const handleToggleActive = (id: string) => {
     setApiKeys(prev =>
-      prev.map(key => ({
-        ...key,
-        isActive: key.id === id,
-      }))
+      prev.map(key => {
+        if (key.id === id) {
+          return { ...key, isActive: !key.isActive };
+        }
+        // If activating this key, deactivate others with same model
+        if (key.model === prev.find(k => k.id === id)?.model && prev.find(k => k.id === id && !k.isActive)) {
+          return { ...key, isActive: false };
+        }
+        return key;
+      })
     );
-    toast({
-      title: "API Key Activated",
-      description: "API key has been set as active.",
+  };
+
+  const toggleKeyVisibility = (id: string) => {
+    setVisibleKeys(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
     });
   };
 
   return (
-    <div className="cta-animated">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
+    <div className="bg-white/10 dark:bg-black/10 backdrop-blur-sm border border-white/20 dark:border-white/10 rounded-xl p-6">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-enhanced mb-1">AI Configuration</h2>
           <p className="text-muted-foreground text-sm">Configure your AI model and API keys</p>
@@ -105,7 +129,7 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium text-enhanced whitespace-nowrap">Model:</label>
             <Select value={selectedModel} onValueChange={onModelChange}>
-              <SelectTrigger className="w-[180px] liquid-glass border-white/20">
+              <SelectTrigger className="w-[180px] bg-white/5 border-white/20">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -138,7 +162,7 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
               
               <div className="space-y-6">
                 {/* Add New API Key */}
-                <div className="space-y-4">
+                <div className="space-y-4 p-4 bg-white/5 dark:bg-black/5 rounded-lg border border-white/10">
                   <h3 className="font-semibold text-enhanced">Add New API Key</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -192,50 +216,81 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
                   ) : (
                     <div className="space-y-3 max-h-60 overflow-y-auto">
                       {apiKeys.map((apiKey) => (
-                        <div key={apiKey.id} className="flex items-center justify-between p-3 border rounded-lg liquid-glass">
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="font-medium text-enhanced">
-                                {AVAILABLE_MODELS.find(m => m.id === apiKey.model)?.name || apiKey.model}
-                              </span>
-                              {apiKey.isActive && (
-                                <Badge variant="default" className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                                  Active
-                                </Badge>
+                        <div key={apiKey.id} className="p-4 border rounded-lg bg-white/5 dark:bg-black/5 border-white/10">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="font-medium text-enhanced">
+                                  {AVAILABLE_MODELS.find(m => m.id === apiKey.model)?.name || apiKey.model}
+                                </span>
+                                {apiKey.isActive && (
+                                  <Badge className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300 text-xs">
+                                    Active
+                                  </Badge>
+                                )}
+                              </div>
+                              
+                              {apiKey.name && (
+                                <p className="text-sm text-muted-foreground mb-1">{apiKey.name}</p>
                               )}
+                              
+                              <div className="flex items-center gap-2 mb-2">
+                                <p className="text-xs text-muted-foreground font-mono">
+                                  {visibleKeys.has(apiKey.id) 
+                                    ? apiKey.key 
+                                    : `${apiKey.key.substring(0, 8)}${'•'.repeat(12)}${apiKey.key.substring(apiKey.key.length - 4)}`
+                                  }
+                                </p>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => toggleKeyVisibility(apiKey.id)}
+                                  className="h-6 w-6 p-0"
+                                >
+                                  {visibleKeys.has(apiKey.id) ? (
+                                    <EyeOff className="w-3 h-3" />
+                                  ) : (
+                                    <Eye className="w-3 h-3" />
+                                  )}
+                                </Button>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 gap-4 text-xs text-muted-foreground">
+                                <div>
+                                  <span className="font-medium">Last used:</span>
+                                  <br />
+                                  {apiKey.lastUsed ? new Date(apiKey.lastUsed).toLocaleDateString() : 'Never'}
+                                </div>
+                                <div>
+                                  <span className="font-medium">Requests:</span>
+                                  <br />
+                                  {apiKey.requestsMade}
+                                </div>
+                                <div className="col-span-2">
+                                  <span className="font-medium">Added:</span> {apiKey.addedDate}
+                                </div>
+                              </div>
                             </div>
-                            {apiKey.name && (
-                              <p className="text-sm text-muted-foreground">{apiKey.name}</p>
-                            )}
-                            <p className="text-xs text-muted-foreground">
-                              Key: {apiKey.key.substring(0, 8)}...{apiKey.key.substring(apiKey.key.length - 4)}
-                            </p>
-                            {apiKey.lastUsed && (
-                              <p className="text-xs text-muted-foreground">
-                                Last used: {new Date(apiKey.lastUsed).toLocaleDateString()} | 
-                                Requests: {apiKey.requestsMade}
-                              </p>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2 ml-4">
-                            {!apiKey.isActive && (
+                            
+                            <div className="flex items-start gap-2 ml-4">
+                              <div className="flex flex-col items-center gap-2">
+                                <Switch
+                                  checked={apiKey.isActive}
+                                  onCheckedChange={() => handleToggleActive(apiKey.id)}
+                                />
+                                <span className="text-xs text-muted-foreground">
+                                  {apiKey.isActive ? 'Active' : 'Inactive'}
+                                </span>
+                              </div>
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleSetActive(apiKey.id)}
-                                className="text-xs"
+                                onClick={() => handleDeleteKey(apiKey.id)}
+                                className="text-destructive hover:text-destructive h-8 w-8 p-0"
                               >
-                                Set Active
+                                <Trash2 className="w-3 h-3" />
                               </Button>
-                            )}
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleDeleteKey(apiKey.id)}
-                              className="text-destructive hover:text-destructive text-xs"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </Button>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -244,7 +299,7 @@ export const AISettings = ({ selectedModel, onModelChange }: AISettingsProps) =>
                 </div>
 
                 {/* Instructions */}
-                <div className="space-y-3">
+                <div className="space-y-3 p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-lg border border-blue-200/50 dark:border-blue-800/50">
                   <h3 className="font-semibold text-enhanced">How to get API Keys:</h3>
                   <div className="space-y-2 text-sm text-muted-foreground">
                     <div>
