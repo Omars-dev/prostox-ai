@@ -296,7 +296,7 @@ const Index = () => {
     <div className="min-h-screen">
       <Header />
       
-      <main className="container mx-auto px-4 py-6 space-y-6 max-w-7xl">
+      <main className="container mx-auto px-[72px] py-8 space-y-6 max-w-7xl">
         {/* AI Settings */}
         <div className="liquid-glass rounded-2xl p-6 shadow-xl">
           <AISettings 
@@ -340,6 +340,28 @@ const Index = () => {
           </div>
         )}
       </main>
+
+      {/* Footer */}
+      <footer className="liquid-glass mt-16 py-8">
+        <div className="container mx-auto px-[72px] text-center">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="text-sm text-enhanced opacity-80">
+              © 2025 ProstoXAI. All rights reserved.
+            </div>
+            <div className="text-sm text-enhanced">
+              Contact Developer:{' '}
+              <a 
+                href="https://linkedin.com/in/omaruxpro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 transition-colors duration-200 hover:underline"
+              >
+                OMAR
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
