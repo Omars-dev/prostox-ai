@@ -33,8 +33,8 @@ export const Header = () => {
             >
               <div className="theme-toggle-track">
                 <div className="theme-toggle-thumb">
-                  <Sun className="theme-icon light-icon" />
-                  <Moon className="theme-icon dark-icon" />
+                  <Sun className="theme-icon light-icon w-4 h-4" />
+                  <Moon className="theme-icon dark-icon w-4 h-4" />
                 </div>
               </div>
             </button>
