@@ -24,16 +24,21 @@ export const Header = () => {
             </div>
           </div>
           
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="glass rounded-full"
-          >
-            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            <span className="sr-only">Toggle theme</span>
-          </Button>
+          {/* Apple-style Theme Switcher */}
+          <div className="liquid-theme-switcher">
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className={`theme-toggle ${theme === 'dark' ? 'active' : ''}`}
+              aria-label="Toggle theme"
+            >
+              <div className="theme-toggle-track">
+                <div className="theme-toggle-thumb">
+                  <Sun className="theme-icon light-icon" />
+                  <Moon className="theme-icon dark-icon" />
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </header>
