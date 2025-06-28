@@ -1,4 +1,3 @@
-
 import { Moon, Sun, Sparkles } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
@@ -16,14 +15,13 @@ export const Header = () => {
             </div>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                ProStoxAI
+                Omar's Creative Studio
               </h1>
               <p className="text-sm text-muted-foreground">
-                AI-Powered Stock Photo Metadata Generator
+                Creative solutions for modern brands. Design, web, and more.
               </p>
             </div>
           </div>
-          
           {/* Apple-style Theme Switcher */}
           <div className="liquid-theme-switcher">
             <button

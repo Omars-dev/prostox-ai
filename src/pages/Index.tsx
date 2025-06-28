@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { FileDropzone } from '@/components/FileDropzone';
@@ -342,11 +341,11 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="liquid-glass mt-16 py-8">
+      <footer className="liquid-glass mt-8 py-6">
         <div className="container mx-auto px-[72px] text-center">
           <div className="flex flex-col items-center space-y-4">
             <div className="text-sm text-enhanced opacity-80">
-              © 2025 ProstoXAI. All rights reserved.
+              © 2025 Omar's Creative Studio. All rights reserved.
             </div>
             <div className="text-sm text-enhanced">
               Contact Developer:{' '}
